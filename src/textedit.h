@@ -8,7 +8,7 @@ class TextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit TextEdit(QWidget *parent = 0);
+    explicit TextEdit(QWidget *parent = nullptr);
     
     void setIndentSize(int indentSize) {this->_indentSize = indentSize;}
     int  indentSize() const {return this->_indentSize;}
@@ -37,6 +37,7 @@ protected:
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &rect, int dy);
+    void highlightCurrentLine();
 
 private:
     int  _indentSize;

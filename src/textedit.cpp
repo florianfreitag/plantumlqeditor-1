@@ -44,8 +44,10 @@ TextEdit::TextEdit(QWidget *parent) :
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+    connect(this, &TextEdit::cursorPositionChanged, this, &TextEdit::highlightCurrentLine);
 
     updateLineNumberAreaWidth(0);
+    highlightCurrentLine();
 }
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -319,5 +321,22 @@ QString TextEdit::toPlainText() {
     return text;
 }
 
+void TextEdit::highlightCurrentLine()
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
 
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+
+        QColor lineColor = QColor(Qt::yellow).lighter(160);
+
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        extraSelections.append(selection);
+    }
+
+    setExtraSelections(extraSelections);
+}
 
